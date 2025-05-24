@@ -215,7 +215,17 @@ void RecursiveDescendant::methodBody() {
 }
 
 void RecursiveDescendant::skipStatement() {
-    while (!isType(static_cast<int>(Tag::DEDENT))) { 
+    int indentLevel = 1;
+    
+    while (look) {
+        if (isType(static_cast<int>(Tag::INDENT))) {
+            indentLevel++;
+        } else if (isType(static_cast<int>(Tag::DEDENT))) {
+            indentLevel--;
+            if (indentLevel == 0) {
+                return;
+            }
+        }
         move();
     }
 }
