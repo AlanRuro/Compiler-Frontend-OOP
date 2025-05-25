@@ -32,9 +32,3 @@ const Word Word::Break("break", static_cast<int>(Tag::BREAK));
 const Word Word::Continue("continue", static_cast<int>(Tag::CONTINUE));
 const Word Word::From("from", static_cast<int>(Tag::FROM));
 const Word Word::Import("import", static_cast<int>(Tag::IMPORT));
-
-
-const Word Word::Property("property", static_cast<int>(Tag::PROPERTY));
-const Word Word::StaticMethod("staticmethod", static_cast<int>(Tag::STATICMETHOD));
-const Word Word::ClassMethod("classmethod", static_cast<int>(Tag::CLASSMETHOD));
-const Word Word::AbstractMethod("abstractmethod", static_cast<int>(Tag::ABSTRACTMETHOD));
