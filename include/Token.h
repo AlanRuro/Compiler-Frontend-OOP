@@ -54,6 +54,7 @@ enum class Tag {
     VARIABLE,
     NUM,
     STRING,
+    DOCSTRING,  // Added for triple-quoted strings
     
     // Operators
     LOGIC_OP,

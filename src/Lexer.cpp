@@ -229,9 +229,49 @@ Token* Lexer::handleNumbers() {
 Token* Lexer::handleStrings() {
     char quote = this->peek;
     std::string str;
-    readch(); // Consume the opening quote
+    std::string quoteBuffer;
     
-    while (this->peek != quote && this->peek != EOF && this->peek != '\n') {
+    // Read opening quotes into buffer
+    while (this->peek == quote && quoteBuffer.length() < 3) {
+        quoteBuffer += this->peek;
+        readch();
+    }
+    
+    bool isDocString = (quoteBuffer.length() == 3);
+    
+    // If it's not a docstring, add the quotes to the string
+    if (!isDocString) {
+        str = quoteBuffer;
+    }
+    
+    while (true) {
+        if (isDocString) {
+            // For docstrings, check for triple quotes to end
+            if (this->peek == quote) {
+                quoteBuffer.clear();
+                while (this->peek == quote && quoteBuffer.length() < 3) {
+                    quoteBuffer += this->peek;
+                    readch();
+                }
+                
+                if (quoteBuffer.length() == 3) {
+                    break;
+                }
+                
+                // Not enough quotes, add them to the string
+                str += quoteBuffer;
+                continue;
+            }
+        } else if (this->peek == quote) {
+            readch(); // Consume the closing quote for normal strings
+            break;
+        }
+        
+        if (this->peek == EOF || (!isDocString && this->peek == '\n')) {
+            throw std::runtime_error("Unterminated " + std::string(isDocString ? "docstring" : "string") + 
+                                   " at line " + std::to_string(this->line));
+        }
+        
         if (this->peek == '\\') {
             readch(); // Skip escape character
             switch (this->peek) {
@@ -249,13 +289,8 @@ Token* Lexer::handleStrings() {
         readch();
     }
     
-    if (this->peek == quote) {
-        readch(); // Consume the closing quote
-        Word* w = new Word(str, static_cast<int>(Tag::STRING));
-        return w;
-    } else {
-        throw std::runtime_error("Unterminated string at this->line " + std::to_string(this->line));
-    }
+    Word* w = new Word(str, static_cast<int>(isDocString ? Tag::DOCSTRING : Tag::STRING));
+    return w;
 }
 
 Token* Lexer::handleOperators() {
