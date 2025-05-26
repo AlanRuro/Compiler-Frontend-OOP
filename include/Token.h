@@ -10,8 +10,9 @@ enum class Tag {
     DEF,
     SELF,
     SPECIAL_NAME,
-    SUPER,  // Added super
-    NONE,   // Added None
+    SUPER,
+    NONE,   
+    ANY,
     TRUE,
     FALSE,
     RETURN,
@@ -28,10 +29,7 @@ enum class Tag {
     
     // // OOP specific
     DECORATOR,      // Added @decorator
-    // PROPERTY,       // Added @property
-    // STATICMETHOD,   // Added @staticmethod
-    // CLASSMETHOD,    // Added @classmethod
-    // ABSTRACTMETHOD, // Added @abstractmethod
+    POO_DECORATOR,  // Added @property @staticmethod @classmethod @abstractmethod
     
     // Punctuation
     COLON,
@@ -39,8 +37,8 @@ enum class Tag {
     DOT,
     OPEN_PARENTHESIS,
     CLOSE_PARENTHESIS,
-    OPEN_BRACKET,   // Added for list access [index]
-    CLOSE_BRACKET,  // Added for list access [index]
+    OPEN_BRACKET,
+    CLOSE_BRACKET,  
     OPEN_BRACE,
     CLOSE_BRACE,
     ASSIGN,
@@ -63,15 +61,13 @@ enum class Tag {
     MINUS,
     MULT,
     DIV,
-    MOD,        // Added %
+    MOD,
     AND,
     OR,
     NOT,
 
     FROM,
-    IMPORT,
-
-    POO_DECORATOR
+    IMPORT
 };
 
 class Token {

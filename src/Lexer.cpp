@@ -19,6 +19,7 @@ Lexer::Lexer(std::string filename) {
     reserve(Word::True);
     reserve(Word::False);
     reserve(Word::None);
+    reserve(Word::Any);
     reserve(Word::If);
     reserve(Word::Elif);
     reserve(Word::Else);
@@ -41,6 +42,11 @@ Lexer::Lexer(std::string filename) {
     reserve(Word("int", static_cast<int>(Tag::TYPE)));
     reserve(Word("float", static_cast<int>(Tag::TYPE)));
     reserve(Word("str", static_cast<int>(Tag::TYPE)));
+    reserve(Word("list", static_cast<int>(Tag::TYPE)));
+    reserve(Word("dict", static_cast<int>(Tag::TYPE)));
+    reserve(Word("tuple", static_cast<int>(Tag::TYPE)));
+    reserve(Word("set", static_cast<int>(Tag::TYPE)));
+    reserve(Word("bool", static_cast<int>(Tag::TYPE)));
 
     // OOP decorators
     reserve(Word("@property", static_cast<int>(Tag::POO_DECORATOR)));
@@ -56,30 +62,7 @@ Lexer::~Lexer() {
     
     // Clean up dynamically allocated Word objects
     for (auto& pair : this->words) {
-        // Don't delete static keyword instances
-        if (pair.second != &Word::And && 
-            pair.second != &Word::Or &&
-            pair.second != &Word::Not &&
-            pair.second != &Word::True &&
-            pair.second != &Word::False &&
-            pair.second != &Word::None &&
-            pair.second != &Word::If &&
-            pair.second != &Word::Elif &&
-            pair.second != &Word::Else &&
-            pair.second != &Word::For &&
-            pair.second != &Word::While &&
-            pair.second != &Word::Class &&
-            pair.second != &Word::Def &&
-            pair.second != &Word::Self &&
-            pair.second != &Word::Super &&
-            pair.second != &Word::Return &&
-            pair.second != &Word::Pass &&
-            pair.second != &Word::In &&
-            pair.second != &Word::Is &&
-            pair.second != &Word::Break &&
-            pair.second != &Word::Continue) {
-            delete pair.second;
-        }
+        delete pair.second;
     }
 }
 

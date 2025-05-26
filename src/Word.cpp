@@ -15,6 +15,7 @@ const Word Word::Not("not", static_cast<int>(Tag::NOT));
 const Word Word::True("True", static_cast<int>(Tag::TRUE));
 const Word Word::False("False", static_cast<int>(Tag::FALSE));
 const Word Word::None("None", static_cast<int>(Tag::NONE));
+const Word Word::Any("Any", static_cast<int>(Tag::ANY));
 const Word Word::If("if", static_cast<int>(Tag::IF));
 const Word Word::Elif("elif", static_cast<int>(Tag::ELIF));
 const Word Word::Else("else", static_cast<int>(Tag::ELSE));

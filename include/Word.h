@@ -17,6 +17,7 @@ class Word : public Token {
         static const Word True;
         static const Word False;
         static const Word None;
+        static const Word Any;
         static const Word If;
         static const Word Elif;
         static const Word Else;
@@ -34,11 +35,6 @@ class Word : public Token {
         static const Word Continue;
         static const Word From;
         static const Word Import;
-        
-        // static const Word Property;
-        // static const Word StaticMethod;
-        // static const Word ClassMethod;
-        // static const Word AbstractMethod;
 
 };
 
