@@ -29,7 +29,7 @@ void RecursiveDescendant::elements() {
 void RecursiveDescendant::moreElements() {
     if (isType(static_cast<int>(Tag::CLASS)) || 
         isType(static_cast<int>(Tag::DEF)) || 
-        isType(static_cast<int>(Tag::DECORATOR))) { 
+        isType(static_cast<int>(Tag::POO_DECORATOR))) { 
         element();
         moreElements();
     }
@@ -90,14 +90,14 @@ void RecursiveDescendant::methodDefs() {
 }
 
 void RecursiveDescendant::moreMethodDefs() {
-    if (isType(static_cast<int>(Tag::DEF)) || isType(static_cast<int>(Tag::DECORATOR))) {
+    if (isType(static_cast<int>(Tag::DEF)) || isType(static_cast<int>(Tag::POO_DECORATOR))) {
         methodDef();
         moreMethodDefs();
     }
 }
 
 void RecursiveDescendant::methodDef() {
-    if (isType(static_cast<int>(Tag::DECORATOR))) {
+    if (isType(static_cast<int>(Tag::POO_DECORATOR))) {
         decorators();
         match(static_cast<int>(Tag::DEF));
         methodName();
@@ -127,7 +127,7 @@ void RecursiveDescendant::decorators() {
 }
 
 void RecursiveDescendant::moreDecorators() {
-    if (isType(static_cast<int>(Tag::DECORATOR))) {
+    if (isType(static_cast<int>(Tag::POO_DECORATOR))) {
         decorator();
         moreDecorators();
     }
@@ -177,7 +177,7 @@ void RecursiveDescendant::typeHint() {
 void RecursiveDescendant::defaultValue() {
     if (isType(static_cast<int>(Tag::ASSIGN))) {
         match(static_cast<int>(Tag::ASSIGN));
-        skipStatement();
+        skipDefault();
     }
 }
 
@@ -230,10 +230,17 @@ void RecursiveDescendant::skipStatement() {
     }
 }
 
+void RecursiveDescendant::skipDefault() {
+    while (look && !isType(static_cast<int>(Tag::COMMA)) &&
+            !isType(static_cast<int>(Tag::CLOSE_PARENTHESIS))) {
+        move();
+    }
+}
+
 void RecursiveDescendant::preSkipStatements() {
     while (look && !isType(static_cast<int>(Tag::CLASS)) && 
             !isType(static_cast<int>(Tag::DEF)) &&
-            !isType(static_cast<int>(Tag::DECORATOR))) {
+            !isType(static_cast<int>(Tag::POO_DECORATOR))) {
         move();
     }
 

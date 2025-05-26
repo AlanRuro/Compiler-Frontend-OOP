@@ -37,7 +37,7 @@ paramList → parameter moreParams | ε
 moreParams → , parameter moreParams | ε
 parameter → VARIABLE typeHint defaultValue
 typeHint → : TYPE | ε
-defaultValue → = expression | ε
+defaultValue → = skipDefault | ε
 returnType → -> TYPE | ε
 ```
 
@@ -49,6 +49,7 @@ methodBody → skipStatement methodBody | ε
 classBody → methodDefs methodBody | ε
 preSkipStatements → (any tokens until class or method def)
 skipStatement → (any tokens until DEDENT)
+skipDefault → (any tokens until ',' or ')' )
 postSkipStatements → (any tokens until EOF)
 ```
 

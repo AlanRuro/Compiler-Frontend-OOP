@@ -42,6 +42,7 @@ private:
     void skipStatements();
     void skipStatement(); 
 
+    void skipDefault();
     void preSkipStatements();
     void postSkipStatements();
 };
