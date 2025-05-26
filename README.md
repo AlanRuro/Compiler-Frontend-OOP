@@ -56,23 +56,69 @@ postSkipStatements → (any tokens until EOF)
 
 ## Token Types
 The grammar recognizes the following token types:
+
+### Keywords
 - `CLASS`: Class definition keyword
 - `DEF`: Method definition keyword
 - `SELF`: Self parameter
+- `INIT`: Special method name (__init__)
 - `SUPER`: Super keyword
+- `NONE`: None value
+- `ANY`: Any type
+- `TRUE`: Boolean true
+- `FALSE`: Boolean false
+- `RETURN`: Return statement
+- `PASS`: Pass statement
+- `IN`: In operator
+- `IS`: Is operator
+- `IF`: If statement
+- `ELIF`: Else if statement
+- `ELSE`: Else statement
+- `FOR`: For loop
+- `WHILE`: While loop
+- `BREAK`: Break statement
+- `CONTINUE`: Continue statement
+- `FROM`: From import
+- `IMPORT`: Import statement
+
+### OOP Specific
 - `DECORATOR`: Decorator symbol (@)
+- `POO_DECORATOR`: OOP-specific decorator (@property, @staticmethod, @classmethod, @abstractmethod)
+
+### Punctuation
 - `COLON`: Colon symbol (:)
 - `COMMA`: Comma symbol (,)
+- `DOT`: Dot symbol (.)
 - `OPEN_PARENTHESIS`: Opening parenthesis (()
 - `CLOSE_PARENTHESIS`: Closing parenthesis ())
+- `OPEN_BRACKET`: Opening bracket ([)
+- `CLOSE_BRACKET`: Closing bracket (])
+- `OPEN_BRACE`: Opening brace ({)
+- `CLOSE_BRACE`: Closing brace (})
 - `ASSIGN`: Assignment operator (=)
 - `ARROW`: Return type arrow (->)
-- `NEWLINE`: Line break
+
+### Indentation
 - `INDENT`: Indentation increase
 - `DEDENT`: Indentation decrease
-- `TYPE`: Type annotation
+- `NEWLINE`: Line break
+
+### Types and Variables
+- `TYPE`: Type annotation (int, float, str, etc.)
 - `VARIABLE`: Variable name
-- `SPECIAL_NAME`: Special method name (e.g., __init__)
+- `NUM`: Numeric literal
+- `STRING`: String literal
+
+### Operators
+- `LOGIC_OP`: Logical operators (==, !=, <, >, <=, >=)
+- `PLUS`: Addition operator (+)
+- `MINUS`: Subtraction operator (-)
+- `MULT`: Multiplication operator (*)
+- `DIV`: Division operator (/)
+- `MOD`: Modulo operator (%)
+- `AND`: Logical AND
+- `OR`: Logical OR
+- `NOT`: Logical NOT
 
 ## Notes
 1. The parser uses recursive descent parsing with explicit method calls
@@ -80,6 +126,7 @@ The grammar recognizes the following token types:
 3. The grammar focuses on class and method structure rather than detailed expression handling
 4. Indentation is explicitly handled to support Python-like block structure
 5. The parser is designed for static analysis of OOP code structure rather than full language implementation
+6. DEDENT tokens are made with semantic logic in the scanner and handled in the parser
 
 ## Example
 ```python
