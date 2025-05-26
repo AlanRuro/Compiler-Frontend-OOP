@@ -27,6 +27,7 @@ Lexer::Lexer(std::string filename) {
     reserve(Word::While);
     reserve(Word::Class);
     reserve(Word::Def);
+    reserve(Word::Init);
     reserve(Word::Self);
     reserve(Word::Super);
     reserve(Word::Return);
@@ -178,40 +179,15 @@ Token* Lexer::handleEOF() {
         return dedent;
     }
     
-    // Si no hay DEDENTs pendientes, retornamos nullptr
     return nullptr;
 }
 
-Token* Lexer::handleDecorators() {
-    std::string buffer;
-    do {
-        buffer += this->peek;
-        readch();
-    } while (std::isalnum(this->peek) || this->peek == '_' || this->peek == '.');
-
-    // Return OOP decorator if applies
-    auto it = this->words.find(buffer);
-    if (it != this->words.end()) {
-        return it->second;  
-    }
-
-    Word* w = new Word(buffer, static_cast<int>(Tag::DECORATOR));
-    this->words[buffer] = w;
-    return w;
-}
-
-Token* Lexer::handleVariables() {
+Token* Lexer::handleVariables(int tag) {
     std::string buffer;
     do {
         buffer += this->peek;
         readch();
     } while (std::isalnum(this->peek) || this->peek == '_');
-    
-    // Check for special method names (starting with __)
-    if (buffer.size() >= 4 && buffer.substr(0, 2) == "__" && buffer.substr(buffer.size() - 2) == "__") {
-        Word* w = new Word(buffer, static_cast<int>(Tag::SPECIAL_NAME));
-        return w;
-    }
     
     // Check if identifier is a keyword
     auto it = this->words.find(buffer);
@@ -221,7 +197,7 @@ Token* Lexer::handleVariables() {
 
     
     // Not a keyword, so create a new identifier token
-    Word* w = new Word(buffer, static_cast<int>(Tag::VARIABLE));
+    Word* w = new Word(buffer, tag);
     this->words[buffer] = w;
     return w;
 }
@@ -426,6 +402,7 @@ Token* Lexer::scan() {
     // Handle comments
     if (this->peek == '#') {
         handleComments();
+        return scan();
     }
 
     // Handle newlines
@@ -440,12 +417,12 @@ Token* Lexer::scan() {
     
     // Handle decorators (@ symbol)
     if (this->peek == '@') {
-        return handleDecorators();
+        return handleVariables(static_cast<int>(Tag::DECORATOR));
     }
     
     // Handle identifiers and keywords
     if (std::isalpha(this->peek) || this->peek == '_') {
-        return handleVariables();
+        return handleVariables(static_cast<int>(Tag::VARIABLE));
     }
     
     // Handle numbers

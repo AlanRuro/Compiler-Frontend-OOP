@@ -34,8 +34,7 @@ private:
     Token* handleNewLines();
     void handleComments();
     Token* handleEOF();
-    Token* handleDecorators();
-    Token* handleVariables();
+    Token* handleVariables(int tag);
     Token* handleNumbers();
     Token* handleStrings();
     Token* handleOperators();

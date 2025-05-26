@@ -25,6 +25,7 @@ class Word : public Token {
         static const Word While;
         static const Word Class;
         static const Word Def;
+        static const Word Init;
         static const Word Self;
         static const Word Super;
         static const Word Return;

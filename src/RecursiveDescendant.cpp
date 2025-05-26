@@ -140,8 +140,8 @@ void RecursiveDescendant::decorator() {
 }
 
 void RecursiveDescendant::methodName() {
-    if (isType(static_cast<int>(Tag::SPECIAL_NAME))) {
-        match(static_cast<int>(Tag::SPECIAL_NAME));
+    if (isType(static_cast<int>(Tag::INIT))) {
+        match(static_cast<int>(Tag::INIT));
     } else {
         match(static_cast<int>(Tag::VARIABLE));
     }

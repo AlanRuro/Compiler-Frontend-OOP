@@ -53,15 +53,6 @@ skipDefault → (any tokens until ',' or ')' )
 postSkipStatements → (any tokens until EOF)
 ```
 
-### OOP Features Tracking
-The parser tracks the following OOP features through boolean flags:
-- `hasClass`: Indicates presence of class definitions
-- `hasInheritance`: Indicates class inheritance
-- `hasInit`: Indicates presence of `__init__` method
-- `hasSelf`: Indicates usage of `self` parameter
-- `hasSuper`: Indicates usage of `super()`
-- `hasDecorator`: Indicates presence of OOP decorators (@property, @staticmethod, @classmethod, @abstractmethod)
-
 ## Token Types
 The grammar recognizes the following token types:
 - `CLASS`: Class definition keyword

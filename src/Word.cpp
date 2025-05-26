@@ -23,6 +23,7 @@ const Word Word::For("for", static_cast<int>(Tag::FOR));
 const Word Word::While("while", static_cast<int>(Tag::WHILE));
 const Word Word::Class("class", static_cast<int>(Tag::CLASS));
 const Word Word::Def("def", static_cast<int>(Tag::DEF));
+const Word Word::Init("__init__", static_cast<int>(Tag::INIT));
 const Word Word::Self("self", static_cast<int>(Tag::SELF));
 const Word Word::Super("super", static_cast<int>(Tag::SUPER));
 const Word Word::Return("return", static_cast<int>(Tag::RETURN));

@@ -9,7 +9,7 @@ enum class Tag {
     CLASS,
     DEF,
     SELF,
-    SPECIAL_NAME,
+    INIT,
     SUPER,
     NONE,   
     ANY,
