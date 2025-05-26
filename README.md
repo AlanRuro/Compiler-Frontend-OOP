@@ -35,7 +35,8 @@ decorator → POO_DECORATOR NEWLINE
 methodName → SPECIAL_NAME | VARIABLE
 paramList → parameter moreParams | ε
 moreParams → , parameter moreParams | ε
-parameter → VARIABLE typeHint defaultValue
+parameter → paramName typeHint defaultValue
+paramName → VARIABLE | * VARIABLE | ** VARIABLE
 typeHint → : TYPE | ε
 defaultValue → = skipDefault | ε
 returnType → -> TYPE | ε

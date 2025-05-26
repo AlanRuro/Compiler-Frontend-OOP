@@ -163,9 +163,23 @@ void RecursiveDescendant::moreParams() {
 }
 
 void RecursiveDescendant::parameter() {
-    match(static_cast<int>(Tag::VARIABLE));
+    paramName();
     typeHint();
     defaultValue();
+}
+
+void RecursiveDescendant::paramName() {
+    if (isType(static_cast<int>(Tag::VARIABLE))) {
+        match(static_cast<int>(Tag::VARIABLE));
+    } else {
+        match(static_cast<int>(Tag::MULT));
+        if (isType(static_cast<int>(Tag::VARIABLE))) {
+            match(static_cast<int>(Tag::VARIABLE));
+        } else {
+            match(static_cast<int>(Tag::MULT));
+            match(static_cast<int>(Tag::VARIABLE));
+        }
+    }
 }
 
 void RecursiveDescendant::typeHint() {

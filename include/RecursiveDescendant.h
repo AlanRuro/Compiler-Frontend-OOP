@@ -29,6 +29,7 @@ private:
     void methodName();
     void paramList();
     void parameter();
+    void paramName();
     void moreParams();
     void typeHint();
     void defaultValue();

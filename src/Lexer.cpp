@@ -157,12 +157,9 @@ void Lexer::handleComments() {
 }
 
 Token* Lexer::handleEOF() {
-    // Siempre generamos los DEDENTs pendientes al encontrar EOF
     // Si hay tokens en la cola de DEDENTs, los procesamos primero
     if (!this->dedent_queue.empty()) {
-        Token* t = this->dedent_queue.front();
-        this->dedent_queue.pop();
-        return t;
+        return handlePendingDedents();
     }
     
     // Si el stack tiene más de un nivel, generamos un DEDENT
