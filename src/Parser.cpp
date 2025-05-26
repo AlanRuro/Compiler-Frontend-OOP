@@ -1,9 +1,7 @@
-// Parser.cpp
 #include "Parser.h"
-#include <stdexcept>
-#include <iostream>
+#include "Lexer.h"
 
-Parser::Parser(Lexer* l) : lexer(l) {
+Parser::Parser(Lexer* lexer) : lexer(lexer) {
     move(); // Get the first token
 }
 
@@ -14,8 +12,7 @@ void Parser::move() {
 void Parser::error(const std::string& message) {
     std::string errorMsg = "Syntax error at line " + std::to_string(lexer->get_line()) +
                           ": " + message;
-    throw 1;
-    // throw std::runtime_error(errorMsg);
+    throw std::runtime_error(errorMsg);
 }
 
 void Parser::match(int tag) {

@@ -13,11 +13,8 @@ int main(int argc, char** argv) {
         Lexer lexer(argv[1]);
         RecursiveDescendant parser(&lexer);
         parser.parse();
-    } catch (int num) {
-    // } catch (const std::exception& e) {
-        // std::cerr << "Error: " << e.what() << std::endl;
+    } catch (const std::exception& e) {
         return 1;
     }
-    
     return 0;
 }

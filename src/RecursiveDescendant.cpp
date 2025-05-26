@@ -12,6 +12,7 @@ void RecursiveDescendant::parse() {
         program();
     } catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
+        throw e;
     }
 }
 
