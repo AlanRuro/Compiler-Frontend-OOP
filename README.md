@@ -127,6 +127,8 @@ The grammar recognizes the following token types:
 4. Indentation is explicitly handled to support Python-like block structure
 5. The parser is designed for static analysis of OOP code structure rather than full language implementation
 6. DEDENT tokens are made with semantic logic in the scanner and handled in the parser
+7. The parser does not validate the statements in method bodies, nor the statements before and after the elements of OOP code
+8. For the OOP-specific decorators, they have to be next to the method definition
 
 ## Example
 ```python
