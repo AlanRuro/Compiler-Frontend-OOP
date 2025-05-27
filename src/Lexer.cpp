@@ -179,6 +179,14 @@ Token* Lexer::handleEOF() {
     return nullptr;
 }
 
+Word* Lexer::findKeyword(std::string word) {
+    auto it = this->words.find(word);
+    if (it != this->words.end()) {
+        return it->second; // Return the keyword token
+    }
+    return nullptr;
+}
+
 Token* Lexer::handleVariables(int tag) {
     std::string buffer;
     do {
@@ -187,12 +195,10 @@ Token* Lexer::handleVariables(int tag) {
     } while (std::isalnum(this->peek) || this->peek == '_');
     
     // Check if identifier is a keyword
-    auto it = this->words.find(buffer);
-    if (it != this->words.end()) {
-        return it->second; // Return the keyword token
+    if (Word* word = findKeyword(buffer)) {
+        return word;
     }
 
-    
     // Not a keyword, so create a new identifier token
     Word* w = new Word(buffer, tag);
     this->words[buffer] = w;
