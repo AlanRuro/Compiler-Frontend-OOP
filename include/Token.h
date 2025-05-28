@@ -79,6 +79,7 @@ class Token {
     public:
         int tag;
         Token(int t);
+        virtual ~Token() = default;
         virtual std::string toString();
 };
 

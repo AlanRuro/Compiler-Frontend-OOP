@@ -1,6 +1,7 @@
 #include "Lexer.h"
 #include <cctype>
 #include <stack>
+#include <memory>
 
 Lexer::Lexer(std::string filename) {
     this->source.open(filename);
@@ -62,15 +63,11 @@ Lexer::~Lexer() {
     if (this->source.is_open()) {
         this->source.close();
     }
-    
-    // Clean up dynamically allocated Word objects
-    for (auto& pair : this->words) {
-        delete pair.second;
-    }
+    // No need to manually delete words anymore, unique_ptr handles it
 }
 
 void Lexer::reserve(Word w) {
-    this->words[w.lexeme] = new Word(w.lexeme, w.tag);
+    this->words[w.lexeme] = std::make_unique<Word>(w.lexeme, w.tag);
 }
 
 void Lexer::readch() {
@@ -181,10 +178,10 @@ Token* Lexer::handleEOF() {
     return nullptr;
 }
 
-Word* Lexer::findKeyword(std::string word) {
+Word* Lexer::findKeyword(const std::string& word) {
     auto it = this->words.find(word);
     if (it != this->words.end()) {
-        return it->second; // Return the keyword token
+        return it->second.get(); // Return raw pointer to the Word
     }
     return nullptr;
 }
@@ -202,9 +199,10 @@ Token* Lexer::handleVariables(int tag) {
     }
 
     // Not a keyword, so create a new identifier token
-    Word* w = new Word(buffer, tag);
-    this->words[buffer] = w;
-    return w;
+    auto w = std::make_unique<Word>(buffer, tag);
+    Word* raw_ptr = w.get();
+    this->words[buffer] = std::move(w);
+    return raw_ptr;
 }
 
 Token* Lexer::handleNumbers() {
@@ -297,8 +295,10 @@ Token* Lexer::handleStrings() {
         readch();
     }
     
-    Word* w = new Word(str, static_cast<int>(isDocString ? Tag::DOCSTRING : Tag::STRING));
-    return w;
+    auto w = std::make_unique<Word>(str, static_cast<int>(isDocString ? Tag::DOCSTRING : Tag::STRING));
+    Word* raw_ptr = w.get();
+    this->words[str] = std::move(w);
+    return raw_ptr;
 }
 
 Token* Lexer::handleOperators() {

@@ -7,6 +7,7 @@
 #include <fstream>
 #include <stack>
 #include <queue>
+#include <memory>
 #include "Token.h"
 #include "Word.h"
 #include "Num.h"
@@ -22,7 +23,7 @@ class Lexer {
         int spaces = 0; // Added to track spaces and identation
         std::stack<int> indent_stack;  // Stack to track indentation levels
         std::queue<Token*> dedent_queue;  // Queue for pending dedent tokens
-        std::unordered_map<std::string, Word*> words;
+        std::unordered_map<std::string, std::unique_ptr<Word>> words;
         
         void reserve(Word w);
         void readch();
@@ -40,7 +41,7 @@ class Lexer {
         Token* handleStrings();
         Token* handleOperators();
         Token* handlePunctuation();
-        Word* findKeyword(std::string word);
+        Word* findKeyword(const std::string& word);
         Token* scan();
         
     public:
