@@ -1,11 +1,17 @@
 CXX = g++
-CXXFLAGS = -std=c++11 -Wall -Wextra -pedantic -Iinclude
+CXXFLAGS = -std=c++17 -Wall -Wextra -pedantic -Iinclude
 SRC_DIR = src
 BUILD_DIR = build
 BIN_DIR = $(BUILD_DIR)/bin
 OBJ_DIR = $(BUILD_DIR)/obj
 INCLUDE_DIR = include
 TARGET = main
+
+# Detect Python command (python3 or python)
+PYTHON := $(shell command -v python3 2>/dev/null || command -v python 2>/dev/null)
+ifeq ($(PYTHON),)
+    $(error "No python or python3 found in PATH")
+endif
 
 # List of source files (in src/)
 SRCS = $(wildcard $(SRC_DIR)/*.cpp)
@@ -29,7 +35,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 clean:
 	rm -rf $(BUILD_DIR)
 
-test:
-	$(BIN_DIR)/$(TARGET) scripts/test.py
+dataset:
+	cd scripts && $(PYTHON) process_dataset.py
 
-.PHONY: all clean test
+.PHONY: all clean test dataset
