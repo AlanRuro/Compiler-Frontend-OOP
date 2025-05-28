@@ -3,7 +3,6 @@ import subprocess
 import os
 from pathlib import Path
 import ast
-import re
 
 def test_code_snippet(code_snippet, executable_path):
     """Test a code snippet using main.exe."""
@@ -34,7 +33,7 @@ def test_code_snippet(code_snippet, executable_path):
                 print(f"Error al eliminar archivo temporal: {e}")
 
 def process_dataset():
-    input_file = Path("dataset.json")
+    input_file = Path("dataset.jsonl")
     output_file = Path("valid_codes.jsonl")
     
     if not input_file.exists():
@@ -68,9 +67,9 @@ def process_dataset():
                         
                     if test_code_snippet(code_snippet, executable_path):
                         valid_entries.append(entry)
-                        print(f"✅ Código válido encontrado en entrada {total_entries}")
-                    else:
-                        print(f"❌ Código inválido en entrada {total_entries}")
+                        # print(f"✅ Código válido encontrado en entrada {total_entries}")
+                    # else:
+                        # print(f"❌ Código inválido en entrada {total_entries}")
                         
                 except json.JSONDecodeError:
                     print(f"Error parsing JSON line: {line[:50]}...")
