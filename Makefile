@@ -13,6 +13,9 @@ ifeq ($(PYTHON),)
     $(error "No python or python3 found in PATH")
 endif
 
+# Default test file if not specified
+TEST_FILE ?= scripts/test.py
+
 # List of source files (in src/)
 SRCS = $(wildcard $(SRC_DIR)/*.cpp)
 
@@ -37,5 +40,8 @@ clean:
 
 dataset:
 	cd scripts && $(PYTHON) process_dataset.py
+
+test:
+	$(BIN_DIR)/$(TARGET) $(TEST_FILE)
 
 .PHONY: all clean test dataset

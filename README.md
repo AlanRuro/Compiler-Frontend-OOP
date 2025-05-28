@@ -2,6 +2,85 @@
 
 This document describes the grammar specification implemented in `RecursiveDescendant.cpp`. The parser is designed to recognize Python-like OOP code structures.
 
+## Usage
+
+### Prerequisites
+- C++17 compatible compiler (g++ recommended)
+- Python 3.x or Python 2.x
+- Make
+
+### Building the Project
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd <repository-name>
+```
+
+2. Build the project:
+```bash
+make
+```
+This will create the executable in `build/bin/main`.
+
+### Running the Parser
+1. To parse a Python file:
+```bash
+make test FILE=path/to/your/file.py
+```
+or directly:
+```bash
+./build/bin/main path/to/your/file.py
+```
+
+2. To process the dataset:
+```bash
+make dataset
+```
+This will run the Python script to process the dataset in the `scripts` directory.
+
+### Cleaning
+To clean build files:
+```bash
+make clean
+```
+
+### Project Structure
+```
+.
+├── include/           # Header files
+│   ├── Lexer.h       # Lexical analyzer
+│   ├── Parser.h      # Base parser class
+│   ├── RecursiveDescendant.h  # Recursive descent parser
+│   ├── Token.h       # Token definitions
+│   └── Word.h        # Word token class
+├── src/              # Source files
+│   ├── Lexer.cpp     # Lexer implementation
+│   ├── Parser.cpp    # Parser implementation
+│   └── RecursiveDescendant.cpp  # Parser implementation
+├── scripts/          # Python scripts
+│   └── process_dataset.py  # Dataset processing
+├── build/            # Build directory (created by make)
+│   ├── bin/         # Executables
+│   └── obj/         # Object files
+├── Makefile         # Build configuration
+└── README.md        # This file
+```
+
+### Output
+The parser will analyze Python files and:
+1. Validate the OOP structure (classes and methods)
+2. Check for proper indentation
+3. Verify method decorators
+4. Validate parameter lists and type hints
+5. Report any syntax errors found
+
+### Error Messages
+The parser provides detailed error messages including:
+- Line and column numbers
+- Expected vs found tokens
+- Syntax errors
+- Indentation errors
+
 ## Grammar Rules
 
 ### Program Structure
