@@ -30,7 +30,10 @@ void RecursiveDescendant::elements() {
 void RecursiveDescendant::moreElements() {
     if (isType(static_cast<int>(Tag::CLASS)) || 
         isType(static_cast<int>(Tag::DEF)) || 
-        isType(static_cast<int>(Tag::POO_DECORATOR))) { 
+        isType(static_cast<int>(Tag::CLASSMETHOD)) ||
+        isType(static_cast<int>(Tag::PROPERTY)) ||
+        isType(static_cast<int>(Tag::STATICMETHOD)) ||
+        isType(static_cast<int>(Tag::ABSTRACTMETHOD))) { 
         element();
         moreElements();
     }
@@ -91,52 +94,71 @@ void RecursiveDescendant::methodDefs() {
 }
 
 void RecursiveDescendant::moreMethodDefs() {
-    if (isType(static_cast<int>(Tag::DEF)) || isType(static_cast<int>(Tag::POO_DECORATOR))) {
+    if (isType(static_cast<int>(Tag::DEF)) || 
+        isType(static_cast<int>(Tag::CLASSMETHOD)) ||
+        isType(static_cast<int>(Tag::PROPERTY)) ||
+        isType(static_cast<int>(Tag::STATICMETHOD)) ||
+        isType(static_cast<int>(Tag::ABSTRACTMETHOD))) {
         methodDef();
         moreMethodDefs();
     }
 }
 
 void RecursiveDescendant::methodDef() {
-    if (isType(static_cast<int>(Tag::POO_DECORATOR))) {
-        decorators();
-        match(static_cast<int>(Tag::DEF));
-        methodName();
-        match(static_cast<int>(Tag::OPEN_PARENTHESIS));
-        if (isType(static_cast<int>(Tag::SELF))) {
-            match(static_cast<int>(Tag::SELF));
-            moreParams();
-        } else {
-            paramList();
-        }
-    } else { // is of type DEF
-        match(static_cast<int>(Tag::DEF));
-        methodName();
-        match(static_cast<int>(Tag::OPEN_PARENTHESIS));
-        match(static_cast<int>(Tag::SELF));
-        moreParams();
+    if (isType(static_cast<int>(Tag::CLASSMETHOD))) {
+        match(static_cast<int>(Tag::CLASSMETHOD));
+        match(static_cast<int>(Tag::NEWLINE));
+        methodDefCls();
+    } else if (isType(static_cast<int>(Tag::PROPERTY))) {
+        match(static_cast<int>(Tag::PROPERTY));
+        match(static_cast<int>(Tag::NEWLINE));
+        methodDefSelf();
+    } else if (isType(static_cast<int>(Tag::ABSTRACTMETHOD))) {
+        match(static_cast<int>(Tag::ABSTRACTMETHOD));
+        match(static_cast<int>(Tag::NEWLINE));
+        methodDefSelf();
+    } else if (isType(static_cast<int>(Tag::STATICMETHOD))) {
+        match(static_cast<int>(Tag::STATICMETHOD));
+        match(static_cast<int>(Tag::NEWLINE));
+        methodDefRaw();
+    } else {
+        methodDefSelf();
     }
+}
+
+void RecursiveDescendant::methodDefRaw() {
+    match(static_cast<int>(Tag::DEF));
+    methodName();
+    match(static_cast<int>(Tag::OPEN_PARENTHESIS));
+    paramList();
     match(static_cast<int>(Tag::CLOSE_PARENTHESIS));
+    methodDefTail();
+}
+
+void RecursiveDescendant::methodDefSelf() {
+    match(static_cast<int>(Tag::DEF));
+    methodName();
+    match(static_cast<int>(Tag::OPEN_PARENTHESIS));
+    match(static_cast<int>(Tag::SELF));
+    moreParams();
+    match(static_cast<int>(Tag::CLOSE_PARENTHESIS));
+    methodDefTail();
+}
+
+void RecursiveDescendant::methodDefCls() {
+    match(static_cast<int>(Tag::DEF));
+    methodName();
+    match(static_cast<int>(Tag::OPEN_PARENTHESIS));
+    match(static_cast<int>(Tag::CLS));
+    moreParams();
+    match(static_cast<int>(Tag::CLOSE_PARENTHESIS));
+    methodDefTail();
+}
+
+void RecursiveDescendant::methodDefTail() {
     returnType();
     match(static_cast<int>(Tag::COLON));
     methodSuite();
-}
-
-void RecursiveDescendant::decorators() {
-    decorator();
-    moreDecorators();
-}
-
-void RecursiveDescendant::moreDecorators() {
-    if (isType(static_cast<int>(Tag::POO_DECORATOR))) {
-        decorator();
-        moreDecorators();
-    }
-}
-
-void RecursiveDescendant::decorator() {
-    match(static_cast<int>(Tag::POO_DECORATOR));
-    match(static_cast<int>(Tag::NEWLINE));
 }
 
 void RecursiveDescendant::methodName() {
@@ -255,7 +277,10 @@ void RecursiveDescendant::skipDefault() {
 void RecursiveDescendant::preSkipStatements() {
     while (look && !isType(static_cast<int>(Tag::CLASS)) && 
             !isType(static_cast<int>(Tag::DEF)) &&
-            !isType(static_cast<int>(Tag::POO_DECORATOR))) {
+            !isType(static_cast<int>(Tag::CLASSMETHOD)) &&
+            !isType(static_cast<int>(Tag::PROPERTY)) &&
+            !isType(static_cast<int>(Tag::STATICMETHOD)) &&
+            !isType(static_cast<int>(Tag::ABSTRACTMETHOD))) {
         move();
     }
 

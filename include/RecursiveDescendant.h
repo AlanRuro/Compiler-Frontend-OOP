@@ -17,15 +17,16 @@ private:
     void classDefs();
     void moreClassDefs();
     void classDef();
-    void decorator();
-    void decorators();
-    void moreDecorators();
     void inheritance();
     void parentList();
     void moreParents();
     void methodDefs();
     void moreMethodDefs();
     void methodDef();
+    void methodDefRaw();
+    void methodDefSelf();
+    void methodDefCls();
+    void methodDefTail();
     void methodName();
     void paramList();
     void parameter();
@@ -40,7 +41,6 @@ private:
     void classBody();
     
     // Skip any statement we don't care about 
-    void skipStatements();
     void skipStatement(); 
 
     void skipDefault();

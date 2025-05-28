@@ -26,13 +26,16 @@ moreParents → , VARIABLE moreParents | ε
 ```
 methodDefs → methodDef moreMethodDefs
 moreMethodDefs → methodDef moreMethodDefs | ε
-methodDef → decorators DEF methodName (paramList) returnType COLON methodSuite
-            | decorators DEF methodName (SELF moreParams) returnType COLON methodSuite
-            | DEF methodName (SELF moreParams) returnType COLON methodSuite
-decorators → decorator moreDecorators
-moreDecorators → decorator moreDecorators | ε
-decorator → POO_DECORATOR NEWLINE
-methodName → SPECIAL_NAME | VARIABLE
+methodDef → CLASSMETHOD NEWLINE methodDefCls 
+            | PROPERTY NEWLINE methodDefSelf 
+            | STATICMETHOD NEWLINE methodDefRaw
+            | ABSTRACTMETHOD NEWLINE methodDefSelf 
+            | methodDefSelf
+methodDefRaw → DEF methodName (paramList) methodDefTail
+methodDefSelf → DEF methodName (SELF moreParams) methodDefTail
+methodDefCls → DEF methodName (CLS moreParams) methodDefTail
+methodDefTail → returnType COLON methodSuite
+methodName → INIT | VARIABLE
 paramList → parameter moreParams | ε
 moreParams → , parameter moreParams | ε
 parameter → paramName typeHint defaultValue

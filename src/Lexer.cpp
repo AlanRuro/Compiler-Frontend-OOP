@@ -39,6 +39,13 @@ Lexer::Lexer(std::string filename) {
     reserve(Word::From);
     reserve(Word::Import);
 
+    // OOP decorators
+    reserve(Word::Property);
+    reserve(Word::StaticMethod);
+    reserve(Word::ClassMethod);
+    reserve(Word::AbstractMethod);
+    reserve(Word::Cls);
+
     // Types
     reserve(Word("int", static_cast<int>(Tag::TYPE)));
     reserve(Word("float", static_cast<int>(Tag::TYPE)));
@@ -49,11 +56,6 @@ Lexer::Lexer(std::string filename) {
     reserve(Word("set", static_cast<int>(Tag::TYPE)));
     reserve(Word("bool", static_cast<int>(Tag::TYPE)));
 
-    // OOP decorators
-    reserve(Word("@property", static_cast<int>(Tag::POO_DECORATOR)));
-    reserve(Word("@staticmethod", static_cast<int>(Tag::POO_DECORATOR)));
-    reserve(Word("@classmethod", static_cast<int>(Tag::POO_DECORATOR)));
-    reserve(Word("@abstractmethod", static_cast<int>(Tag::POO_DECORATOR)));
 }
 
 Lexer::~Lexer() {

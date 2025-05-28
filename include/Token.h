@@ -28,8 +28,12 @@ enum class Tag {
     CONTINUE,
     
     // // OOP specific
-    DECORATOR,      // Added @decorator
-    POO_DECORATOR,  // Added @property @staticmethod @classmethod @abstractmethod
+    DECORATOR,
+    PROPERTY,       // @property
+    STATICMETHOD,   // @staticmethod
+    CLASSMETHOD,    // @classmethod
+    ABSTRACTMETHOD, // @abstractmethod
+    CLS,            // cls for @classmethod
     
     // Punctuation
     COLON,
@@ -54,7 +58,7 @@ enum class Tag {
     VARIABLE,
     NUM,
     STRING,
-    DOCSTRING,  // Added for triple-quoted strings
+    DOCSTRING,
     
     // Operators
     LOGIC_OP,
