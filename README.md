@@ -64,6 +64,7 @@ The grammar recognizes the following token types:
 - `CLASS`: Class definition keyword
 - `DEF`: Method definition keyword
 - `SELF`: Self parameter
+- `CLS`: Cls parameter
 - `INIT`: Special method name (__init__)
 - `SUPER`: Super keyword
 - `NONE`: None value
@@ -86,7 +87,10 @@ The grammar recognizes the following token types:
 
 ### OOP Specific
 - `DECORATOR`: Decorator symbol (@)
-- `POO_DECORATOR`: OOP-specific decorator (@property, @staticmethod, @classmethod, @abstractmethod)
+- `PROPERTY`: OOP-specific decorator @property
+- `STATICMETHOD`: OOP-specific decorator @staticmethod
+- `CLASSMETHOD`: OOP-specific decorator @classmethod
+- `ABSTRACTMETHOD`: OOP-specific decorator @abstractmethod
 
 ### Punctuation
 - `COLON`: Colon symbol (:)
@@ -132,6 +136,7 @@ The grammar recognizes the following token types:
 6. DEDENT tokens are made with semantic logic in the scanner and handled in the parser
 7. The parser does not validate the statements in method bodies, nor the statements before and after the elements of OOP code
 8. For the OOP-specific decorators, they have to be next to the method definition
+9. If there are many elements of OOP code separated by normal statements, just the first element found will be validated
 
 ## Example
 ```python
