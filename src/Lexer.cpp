@@ -88,7 +88,7 @@ bool Lexer::readch(char c) {
 
 void Lexer::skipWhitespace(bool at_line_start) {
     // Skip whitespace except for newlines and indentation at the start of a line
-    
+    this->spaces = 0;
     while (true) {
         if (this->peek == ' ') {
             if (at_line_start) {
@@ -122,13 +122,13 @@ Token* Lexer::handleDedents() {
     Token* dedent = new Token(static_cast<int>(Tag::DEDENT));
     
     // Check if we need multiple dedents
-    while (!this->indent_stack.empty() && spaces < this->indent_stack.top()) {
+    while (!this->indent_stack.empty() && this->spaces < this->indent_stack.top()) {
         this->indent_stack.pop();
         this->dedent_queue.push(new Token(static_cast<int>(Tag::DEDENT)));
     }
     
     // Verify indentation level is valid
-    if (this->indent_stack.empty() || spaces != this->indent_stack.top()) {
+    if (this->indent_stack.empty() || this->spaces != this->indent_stack.top()) {
         throw std::runtime_error("Invalid indentation at this->line " + std::to_string(this->line));
     }
     
@@ -137,7 +137,7 @@ Token* Lexer::handleDedents() {
 
 Token* Lexer::handleIdent() {
     // Indent
-    this->indent_stack.push(spaces);
+    this->indent_stack.push(this->spaces);
     return new Token(static_cast<int>(Tag::INDENT));
 }
 
@@ -429,9 +429,9 @@ Token* Lexer::scan() {
     if (at_line_start && this->peek != '\n' && this->peek != '#' && this->peek != EOF) {
         int current_indent = this->indent_stack.top();
     
-        if (spaces > current_indent) {
+        if (this->spaces > current_indent) {
             return handleIdent();
-        } else if (spaces < current_indent) {
+        } else if (this->spaces < current_indent) {
             return handleDedents();
         }
         // If spaces == current_indent, no indentation token needed
