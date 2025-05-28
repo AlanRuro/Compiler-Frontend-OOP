@@ -37,6 +37,12 @@ class Word : public Token {
         static const Word From;
         static const Word Import;
 
+        static const Word Property;
+        static const Word StaticMethod;
+        static const Word ClassMethod;
+        static const Word AbstractMethod;
+        static const Word Cls;
+
 };
 
 #endif // WORD_H
