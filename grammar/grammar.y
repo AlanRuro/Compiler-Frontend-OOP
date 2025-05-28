@@ -12,300 +12,169 @@ bool hasSuper = false;
 bool hasDecorator = false;
 %}
 
-// Tokens específicos para POO
-%token CLASS DEF SELF SUPER
-%token DECORATOR PROPERTY STATICMETHOD CLASSMETHOD ABSTRACTMETHOD
-%token COLON COMMA DOT OPEN_PARENTHESIS CLOSE_PARENTHESIS
-%token OPEN_BRACKET CLOSE_BRACKET OPEN_BRACE CLOSE_BRACE
-%token ASSIGN ARROW NEWLINE
-%token TYPE VARIABLE SPECIAL_NAME
-%token STRING NUM
-%token IF TRY EXCEPT PASS WHILE
-%token EQUALS PLUS MINUS MULT DIV
-%token RETURN IN
-%token LT GT LE GE NE
-%token AND OR NOT
-%token AT
+// Tokens
+%token CLASS DEF SELF CLS TYPE VARIABLE INIT MULT
+%token PROPERTY STATICMETHOD CLASSMETHOD ABSTRACTMETHOD
+%token COLON COMMA OPEN_PARENTHESIS CLOSE_PARENTHESIS
+%token ASSIGN ARROW NEWLINE INDENT DEDENT
 
 %%
 
-// Punto de entrada - solo acepta un statement a la vez
+// Program Structure
 program
-    : oop_statement
+    : preSkipStatements elements postSkipStatements
     ;
 
-// Un solo statement POO
-oop_statement
-    : method_definition          // def method(self, args): return ...
-    | decorator_statement       // @property
-    | self_attribute_access     // self.attr.method()
-    | self_attribute_assign     // self.attr = value
-    | self_method_call         // self.method()
-    | if_self_statement        // if self.attr == value: ...
-    | while_self_statement     // while self.attr == value: ...
-    | try_self_statement       // try: self.method() except: ...
-    | return_statement         // return type(self)(...)
-    | super_call              // super().method()
+elements
+    : element moreElements
     ;
 
-// Decorador
-decorator_statement
-    : AT VARIABLE
-    {
-        hasDecorator = true;
-    }
-    ;
-
-// Definición de método con return
-method_definition
-    : DEF method_name OPEN_PARENTHESIS SELF param_list_prime CLOSE_PARENTHESIS return_type COLON return_statement
-    {
-        hasSelf = true;
-        if ($2 == "__init__") hasInit = true;
-    }
-    ;
-
-// Acceso a atributos de self con llamadas a métodos
-self_attribute_access
-    : SELF DOT attribute_chain_prime
-    {
-        hasSelf = true;
-    }
-    ;
-
-attribute_chain_prime
-    : VARIABLE method_call_chain_prime
-    | SPECIAL_NAME method_call_chain_prime
-    | VARIABLE OPEN_BRACKET expression CLOSE_BRACKET method_call_chain_prime
-    ;
-
-method_call_chain_prime
-    : DOT method_call method_call_chain_prime
+moreElements
+    : element moreElements
     | %empty
     ;
 
-// Asignación a atributos de self
-self_attribute_assign
-    : SELF DOT attribute_chain_prime ASSIGN expression
-    {
-        hasSelf = true;
-    }
+element
+    : classDefs
+    | methodDefs
     ;
 
-// Llamada a método de self
-self_method_call
-    : SELF DOT method_name OPEN_PARENTHESIS arg_list_prime CLOSE_PARENTHESIS
-    {
-        hasSelf = true;
-    }
+// Class Definitions
+classDefs
+    : classDef moreClassDefs
     ;
 
-// Llamada a super
-super_call
-    : SUPER OPEN_PARENTHESIS CLOSE_PARENTHESIS DOT method_name OPEN_PARENTHESIS arg_list_prime CLOSE_PARENTHESIS
-    {
-        hasSuper = true;
-    }
-    ;
-
-// If statement con self
-if_self_statement
-    : IF self_condition COLON statement
-    {
-        hasSelf = true;
-    }
-    ;
-
-// While statement con self
-while_self_statement
-    : WHILE self_condition COLON statement
-    {
-        hasSelf = true;
-    }
-    ;
-
-self_condition
-    : SELF DOT VARIABLE comparison_op expression
-    | SELF DOT VARIABLE IN expression
-    | self_condition AND self_condition
-    | self_condition OR self_condition
-    | NOT self_condition
-    ;
-
-comparison_op
-    : EQUALS
-    | NE
-    | LT
-    | GT
-    | LE
-    | GE
-    ;
-
-// Try statement con self
-try_self_statement
-    : TRY COLON self_statement_list_prime except_clauses
-    {
-        hasSelf = true;
-    }
-    ;
-
-self_statement_list_prime
-    : self_statement self_statement_list_prime
+moreClassDefs
+    : classDef moreClassDefs
     | %empty
     ;
 
-self_statement
-    : self_method_call
-    | self_attribute_access
-    | self_attribute_assign
-    | super_call
-    | PASS
+classDef
+    : CLASS VARIABLE inheritance COLON classSuite
     ;
 
-except_clauses
-    : except_clause except_clauses
+inheritance
+    : OPEN_PARENTHESIS parentList CLOSE_PARENTHESIS
     | %empty
     ;
 
-except_clause
-    : EXCEPT VARIABLE COLON statement
-    | EXCEPT OPEN_PARENTHESIS VARIABLE CLOSE_PARENTHESIS COLON statement
+parentList
+    : VARIABLE moreParents
     ;
 
-// Return statement
-return_statement
-    : RETURN expression
+moreParents
+    : COMMA VARIABLE moreParents
+    | %empty
     ;
 
-// Nombre de método (normal o especial)
-method_name
-    : SPECIAL_NAME
-    {
-        if ($1 == "__init__") hasInit = true;
-    }
+// Method Definitions
+methodDefs
+    : methodDef moreMethodDefs
+    ;
+
+moreMethodDefs
+    : methodDef moreMethodDefs
+    | %empty
+    ;
+
+methodDef
+    : CLASSMETHOD NEWLINE methodDefCls
+    | PROPERTY NEWLINE methodDefSelf
+    | STATICMETHOD NEWLINE methodDefRaw
+    | ABSTRACTMETHOD NEWLINE methodDefSelf
+    | methodDefSelf
+    ;
+
+methodDefRaw
+    : DEF methodName OPEN_PARENTHESIS paramList CLOSE_PARENTHESIS methodDefTail
+    ;
+
+methodDefSelf
+    : DEF methodName OPEN_PARENTHESIS SELF moreParams CLOSE_PARENTHESIS methodDefTail
+    ;
+
+methodDefCls
+    : DEF methodName OPEN_PARENTHESIS CLS moreParams CLOSE_PARENTHESIS methodDefTail
+    ;
+
+methodDefTail
+    : returnType COLON methodSuite
+    ;
+
+methodName
+    : INIT
     | VARIABLE
     ;
 
-// Lista de parámetros (sin recursión izquierda)
-param_list_prime
-    : COMMA VARIABLE type_hint default_value param_list_prime
+paramList
+    : parameter moreParams
     | %empty
     ;
 
-// Tipo de parámetro
-type_hint
+moreParams
+    : COMMA parameter moreParams
+    | %empty
+    ;
+
+parameter
+    : paramName typeHint defaultValue
+    ;
+
+paramName
+    : VARIABLE
+    | MULT VARIABLE
+    | MULT MULT VARIABLE
+    ;
+
+typeHint
     : COLON TYPE
     | %empty
     ;
 
-// Valor por defecto
-default_value
-    : ASSIGN expression
+defaultValue
+    : ASSIGN skipDefault
     | %empty
     ;
 
-// Tipo de retorno
-return_type
+returnType
     : ARROW TYPE
     | %empty
     ;
 
-// Lista de argumentos (sin recursión izquierda)
-arg_list_prime
-    : expression arg_list_tail
-    | named_arg arg_list_tail
+// Suite and Statements
+classSuite
+    : NEWLINE INDENT classBody DEDENT
+    ;
+
+methodSuite
+    : NEWLINE INDENT methodBody DEDENT
+    ;
+
+methodBody
+    : skipStatement methodBody
     | %empty
     ;
 
-arg_list_tail
-    : COMMA expression arg_list_tail
-    | COMMA named_arg arg_list_tail
+classBody
+    : methodDefs methodBody
     | %empty
     ;
 
-named_arg
-    : VARIABLE ASSIGN expression
+// Skip statements (no parsing, just token consumption)
+preSkipStatements
+    : %empty
     ;
 
-// Expresiones básicas
-expression
-    : VARIABLE
-    | STRING
-    | NUM
-    | method_call
-    | attribute_access
-    | binary_expression
-    | comparison_expression
-    | logical_expression
-    | list_literal
-    | tuple_literal
-    | type_expression
-    | ternary_expression
+skipStatement
+    : %empty
     ;
 
-// Llamada a método
-method_call
-    : VARIABLE OPEN_PARENTHESIS arg_list_prime CLOSE_PARENTHESIS
-    | attribute_access OPEN_PARENTHESIS arg_list_prime CLOSE_PARENTHESIS
+skipDefault
+    : %empty
     ;
 
-// Acceso a atributos
-attribute_access
-    : VARIABLE DOT attribute_chain_prime
-    | VARIABLE OPEN_BRACKET expression CLOSE_BRACKET
-    ;
-
-// Expresiones binarias
-binary_expression
-    : expression PLUS expression
-    | expression MINUS expression
-    | expression MULT expression
-    | expression DIV expression
-    ;
-
-// Expresiones de comparación
-comparison_expression
-    : expression comparison_op expression
-    | expression IN expression
-    ;
-
-// Expresiones lógicas
-logical_expression
-    : expression AND expression
-    | expression OR expression
-    | NOT expression
-    ;
-
-// Expresión ternaria
-ternary_expression
-    : expression IF expression ELSE expression
-    ;
-
-// Expresión con type()
-type_expression
-    : TYPE OPEN_PARENTHESIS SELF CLOSE_PARENTHESIS OPEN_PARENTHESIS arg_list_prime CLOSE_PARENTHESIS
-    {
-        hasSelf = true;
-    }
-    ;
-
-// Literales
-list_literal
-    : OPEN_BRACKET arg_list_prime CLOSE_BRACKET
-    ;
-
-tuple_literal
-    : OPEN_PARENTHESIS arg_list_prime CLOSE_PARENTHESIS
-    ;
-
-// Statement genérico
-statement
-    : self_method_call
-    | self_attribute_access
-    | self_attribute_assign
-    | method_call
-    | super_call
-    | PASS
+postSkipStatements
+    : %empty
     ;
 
 %%
