@@ -10,6 +10,7 @@
 #include "Token.h"
 #include "Word.h"
 #include "Num.h"
+#include "TokenStream.h"
 
 class Lexer {
     private:
@@ -40,11 +41,14 @@ class Lexer {
         Token* handleOperators();
         Token* handlePunctuation();
         Word* findKeyword(std::string word);
+        Token* scan();
         
     public:
         Lexer(std::string filename);
         ~Lexer();
-        Token* scan();
+        
+        TokenStream* generateStream();
+        
         int get_line() const { return line; }
         int get_column() const { return column; }
 };

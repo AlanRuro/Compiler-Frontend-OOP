@@ -2,15 +2,18 @@
 #define PARSER_H
 
 #include "Lexer.h"
+#include "TokenStream.h"
 #include <iostream>
 
 class Parser {
     public:
-        Parser(Lexer* lexer);
+        // Constructor que acepta TokenStream
+        Parser(TokenStream* stream);
+        virtual ~Parser() = default;
         virtual void parse() = 0;
 
     protected:
-        Lexer* lexer;
+        TokenStream* stream;
         Token* look;
 
         void move();
@@ -18,7 +21,6 @@ class Parser {
         void error(const std::string& message);
         void debug(const std::string& message);
         bool isType(int tag);
-
 };
 
 #endif // PARSER_H

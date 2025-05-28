@@ -1,16 +1,16 @@
 #include "Parser.h"
 #include "Lexer.h"
 
-Parser::Parser(Lexer* lexer) : lexer(lexer) {
+Parser::Parser(TokenStream* stream) : stream(stream) {
     move(); // Get the first token
 }
 
 void Parser::move() {
-    look = lexer->scan();
+    look = stream->next();
 }
 
 void Parser::error(const std::string& message) {
-    std::string errorMsg = "Syntax error at line " + std::to_string(lexer->get_line()) +
+    std::string errorMsg = "Syntax error at token position " + std::to_string(stream->position()) +
                           ": " + message;
     throw std::runtime_error(errorMsg);
 }

@@ -485,3 +485,20 @@ Token* Lexer::scan() {
                                     ", column " + std::to_string(this->column));
     
 }
+
+TokenStream* Lexer::generateStream() {
+    TokenStream* stream = new TokenStream();
+        
+    // Generate all tokens
+    while (true) {
+        Token* token = scan();
+        if (token == nullptr) {
+            break;  // End of file
+        }
+        stream->addToken(token);
+    }
+    
+    // Reset stream position
+    stream->reset();
+    return stream;
+}

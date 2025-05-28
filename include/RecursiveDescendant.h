@@ -5,7 +5,7 @@
 
 class RecursiveDescendant : public Parser {
 public:
-    RecursiveDescendant(Lexer* lexer);
+    RecursiveDescendant(TokenStream* stream);
     void parse();
 
 private:

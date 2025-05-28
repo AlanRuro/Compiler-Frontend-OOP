@@ -3,8 +3,7 @@
 #include <stdexcept>
 #include <iostream>
 
-RecursiveDescendant::RecursiveDescendant(Lexer* l) : Parser(l) {
-
+RecursiveDescendant::RecursiveDescendant(TokenStream* stream) : Parser(stream) {
 }
 
 void RecursiveDescendant::parse() {
