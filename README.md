@@ -8,6 +8,7 @@ This document describes the grammar specification implemented in `RecursiveDesce
 - C++17 compatible compiler (g++ recommended)
 - Python 3.x or Python 2.x
 - Make
+- CMake (version 3.10 or higher)
 
 ### Building the Project
 1. Clone the repository:
@@ -50,19 +51,28 @@ make clean
 ├── include/           # Header files
 │   ├── Lexer.h       # Lexical analyzer
 │   ├── Parser.h      # Base parser class
+│   ├── TokenStream.h # Stream of tokens class
 │   ├── RecursiveDescendant.h  # Recursive descent parser
 │   ├── Token.h       # Token definitions
 │   └── Word.h        # Word token class
 ├── src/              # Source files
 │   ├── Lexer.cpp     # Lexer implementation
 │   ├── Parser.cpp    # Parser implementation
-│   └── RecursiveDescendant.cpp  # Parser implementation
+│   ├── Parser.cpp    # Stream of tokens implementation
+│   ├── RecursiveDescendant.cpp  # Parser implementation
+│   ├── Token.h       # Token implementation
+│   └── Word.h        # Word token class implementation
 ├── scripts/          # Python scripts
+│   ├── dataset.jsonl  # Dataset
 │   └── process_dataset.py  # Dataset processing
 ├── build/            # Build directory (created by make)
 │   ├── bin/         # Executables
 │   └── obj/         # Object files
+├── tests/            # Build directory (created by make)
+│   ├── lexer_tests.cpp         # Tests for token generation
+│   └── parser_tests.cpp         # Test for syntax validation
 ├── Makefile         # Build configuration
+├── CMakeLists.txt         # Build configuration
 └── README.md        # This file
 ```
 
@@ -77,7 +87,7 @@ The parser will analyze Python files and:
 ### Error Messages
 The parser provides detailed error messages including:
 - Line and column numbers
-- Expected vs found tokens
+- Unexpected tokens
 - Syntax errors
 - Indentation errors
 
@@ -225,3 +235,72 @@ class MyClass(ParentClass):
         self.attribute = value
         return result
 ``` 
+
+## Testing
+
+### Setting up Google Test
+1. Clone the Google Test repository:
+```bash
+git clone https://github.com/google/googletest.git
+```
+
+2. Build Google Test:
+```bash
+# Create and enter build directory for Google Test
+mkdir googletest/build
+cd googletest/build
+
+# Generate build files
+cmake ../../googletest
+# or for Windows with MinGW
+cmake -G "MinGW Makefiles" ../../googletest
+
+# Build Google Test
+cmake --build .
+
+# Return to project root
+cd ../..
+```
+
+### Building the Project
+1. Create and enter build directory for our project:
+```bash
+mkdir -p build
+cd build
+```
+
+2. Generate build files:
+```bash
+cmake ..
+# or for Windows with MinGW
+cmake -G "MinGW Makefiles" ..
+```
+
+3. Build the project:
+```bash
+cmake --build .
+```
+
+### Running Tests
+1. After building the project, you can run the tests using CMake:
+```bash
+# Run all tests
+ctest
+
+# Run specific test executable
+./lexer_tests
+./parser_tests
+
+# Run tests with verbose output
+ctest --output-on-failure
+```
+
+2. To see all available test cases:
+```bash
+./lexer_tests --gtest_list_tests
+./parser_tests --gtest_list_tests
+```
+
+Note: The tests are located in the `tests/` directory:
+- `lexer_tests.cpp`: Tests for the lexical analyzer
+- `parser_tests.cpp`: Tests for the parser

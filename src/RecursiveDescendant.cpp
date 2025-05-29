@@ -9,7 +9,7 @@ RecursiveDescendant::RecursiveDescendant(TokenStream* stream) : Parser(stream) {
 void RecursiveDescendant::parse() {
     try {
         program();
-    } catch (const std::exception& e) {
+    } catch (const std::runtime_error& e) {
         std::cerr << e.what() << std::endl;
         throw e;
     }
