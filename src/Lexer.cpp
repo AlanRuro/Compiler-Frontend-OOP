@@ -344,7 +344,7 @@ Token* Lexer::handleOperators() {
             readch();
             t = new Word("!=", static_cast<int>(Tag::LOGIC_OP));
         } else {
-            throw std::runtime_error("Unexpected character: ! at line " + std::to_string(this->line));
+            throw std::runtime_error("Unrecognized character: ! at line " + std::to_string(this->line));
         }
         break;
     case '<':
@@ -480,7 +480,7 @@ Token* Lexer::scan() {
     if (t) return t;
     else t = handleOperators();
     if (t) return t;
-    else throw std::runtime_error("Unexpected character: " + std::string(1, this->peek) + 
+    else throw std::runtime_error("Unrecognized character: " + std::string(1, this->peek) + 
                                     " at line " + std::to_string(this->line) + 
                                     ", column " + std::to_string(this->column));
     

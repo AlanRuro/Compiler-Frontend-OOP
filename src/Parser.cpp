@@ -19,7 +19,7 @@ void Parser::match(int tag) {
     if (look && look->tag == tag) {
         move();
     } else {
-        error("Expected token with tag " + std::to_string(tag));
+        error("Unexpected token");
     }
 }
 
