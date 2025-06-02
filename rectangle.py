@@ -1,12 +1,12 @@
 class Rectangulo:
-    def init(self, base, altura):
+    def __init__(self, base, altura):
         self.base = base
         self.altura = altura
 
     def calcular_perimetro(self):
         return 2 * (self.base + self.altura)
 
-    def str(self):
+    def __str__(self):
         return f"Rectángulo de base {self.base} y altura {self.altura}"
 
 rect = Rectangulo(5, 10)
