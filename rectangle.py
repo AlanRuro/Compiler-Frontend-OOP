@@ -3,9 +3,6 @@ class Rectangulo:
         self.base = base
         self.altura = altura
 
-    def calcular_area(self):
-        return self.base * self.alutra  # Error: 'alutra' está mal escrito
-
     def calcular_perimetro(self):
         return 2 * (self.base + self.altura)
 
