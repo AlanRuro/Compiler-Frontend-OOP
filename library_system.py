@@ -1,10 +1,10 @@
 class Book:
     def __init__(self, title, author, year):
         self.title = title
-        self.author = authors 
+        self.author = author 
         self.year = year
 
-    def display_info(self)
+    def display_info(self):
         print("Title:", self.title)
         print("Author:", self.author)
         print("Year:", self.year)
@@ -14,14 +14,14 @@ class Library:
         self.name = name
         self.books = []
 
-    def add_book(book):
-        self.books.append(book)  
+    def add_book(self, book):
+        self.books.append(book)   
 
     def list_books(self):
         if len(self.books) == 0:
             print("The library is empty")
         else:
-            for i in range(books): 
+            for i in range(len(self.books)): 
                 book.display_info()  
 
     def find_book_by_title(self, title):
