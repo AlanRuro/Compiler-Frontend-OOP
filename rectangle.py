@@ -9,6 +9,9 @@ class Rectangulo:
     def __str__(self):
         return f"Rectángulo de base {self.base} y altura {self.altura}"
 
+    def calcular_area(self):
+        return self.base * self.altura
+
 rect = Rectangulo(5, 10)
 print(rect)
 print("Área:", rect.calcular_area())
