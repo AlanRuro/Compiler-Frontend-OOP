@@ -6,6 +6,9 @@ class Rectangulo:
     def calcular_perimetro(self):
         return 2 * (self.base + self.altura)
 
+    def calcular_area(self):
+        return self.base * self.altura
+
     def __str__(self):
         return f"Rectángulo de base {self.base} y altura {self.altura}"
 
